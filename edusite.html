@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduBasics — Learn Something New</title>
+  <style>
+    :root{
+      --bg:#0f1221; --card:#171a2b; --text:#f2f4ff; --muted:#b8bcd6; --brand:#6aa1ff; --accent:#7ef0c1; --danger:#ff7a86;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    [data-theme="light"]{--bg:#f6f7fb; --card:#ffffff; --text:#1b203a; --muted:#4f5671; --brand:#2d6cff; --accent:#05b384; --danger:#d43f52; --shadow:0 10px 24px rgba(31,42,99,.12)}
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;scroll-behavior:smooth}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell, Noto Sans, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol; background:var(--bg); color:var(--text); line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:auto;padding:0 1rem}
+    header{position:sticky;top:0;z-index:50;background:rgba(15,18,33,.8);backdrop-filter:saturate(150%) blur(8px); border-bottom:1px solid rgba(255,255,255,.06)}
+    [data-theme="light"] header{background:rgba(246,247,251,.8); border-bottom:1px solid rgba(0,0,0,.06)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0}
+    .brand{display:flex;gap:.6rem;align-items:center;font-weight:900;letter-spacing:.4px}
+    .brand .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:var(--shadow)}
+    nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
+    nav a{padding:.5rem .75rem;border-radius:10px;color:var(--muted)}
+    nav a:hover, nav a:focus{background:rgba(255,255,255,.06); color:var(--text)}
+    .actions{display:flex;align-items:center;gap:.6rem}
+    .btn{border:0;border-radius:12px;padding:.65rem .9rem;font-weight:600;cursor:pointer; box-shadow:var(--shadow)}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),var(--accent));color:#061224}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.12)}
+    [data-theme="light"] .btn-ghost{border-color:rgba(0,0,0,.12)}
+
+    .hero{padding:4rem 0 3rem;display:grid;grid-template-columns:1.2fr .8fr;gap:2rem;align-items:center}
+    .hero h1{font-size:clamp(1.8rem,3.6vw,3rem);margin:.2rem 0 1rem;line-height:1.2}
+    .tag{display:inline-block;font-size:.85rem;color:var(--brand);background:rgba(106,161,255,.15); padding:.3rem .6rem;border-radius:999px}
+    [data-theme="light"] .tag{background:rgba(45,108,255,.12)}
+    .hero p{color:var(--muted)}
+    .hero .card{background:var(--card);border-radius:18px;padding:1rem;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+    .stat{background:var(--card);border-radius:14px;padding:1rem;text-align:center}
+    .stat b{font-size:1.4rem}
+
+    section{padding:3rem 0}
+    h2{font-size:1.6rem;margin:0 0 1rem}
+
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.grid{grid-template-columns:1fr} nav ul{display:none}}
+
+    .card{background:var(--card);border-radius:16px;padding:1rem;box-shadow:var(--shadow); display:flex;flex-direction:column;gap:.5rem}
+    .chip{font-size:.75rem;opacity:.8}
+    .progress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));width:0%}
+
+    .two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem}
+    @media (max-width:900px){.two-col{grid-template-columns:1fr}}
+
+    .list{display:grid;gap:.5rem;color:var(--muted)}
+
+    .footer{padding:2rem 0;border-top:1px solid rgba(255,255,255,.1);color:var(--muted)}
+    [data-theme="light"] .footer{border-top:1px solid rgba(0,0,0,.08)}
+
+    dialog{border:0;border-radius:16px;max-width:720px;width:92%;padding:0;box-shadow:var(--shadow);background:var(--card);color:var(--text)}
+    dialog::backdrop{background:rgba(0,0,0,.6)}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    .modal-body{padding:1rem}
+    .modal-foot{padding:1rem;display:flex;justify-content:flex-end;gap:.5rem;border-top:1px solid rgba(255,255,255,.08)}
+
+    .form{display:grid;gap:.8rem}
+    .form input,.form textarea{width:100%;padding:.8rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,.16); background:transparent;color:var(--text)}
+    [data-theme="light"] .form input,[data-theme="light"] .form textarea{border-color:rgba(0,0,0,.16)}
+    .note{font-size:.9rem;color:var(--muted)}
+
+    .quiz{display:grid;gap:1rem}
+    .q{background:var(--card);padding:1rem;border-radius:12px}
+    .q legend{font-weight:600;margin-bottom:.5rem}
+    .q label{display:block;margin:.3rem 0}
+    .score{font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="#home" aria-label="EduBasics Home">
+        <span class="logo" aria-hidden="true"></span>
+        <span>EduBasics</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#quiz">Quiz</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="actions">
+        <button id="themeBtn" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle theme">🌗 Theme</button>
+        <a class="btn btn-primary" href="#courses">Start Learning</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home" class="container">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div>
+        <span class="tag">Free • Bite‑size lessons</span>
+        <h1 id="heroTitle">Learn the basics — quickly and clearly</h1>
+        <p>Short lessons, simple language, and interactive quizzes to help you master fundamentals in Math, Science, History, and Programming.</p>
+        <div style="display:flex; gap:.6rem; margin-top:1rem">
+          <a class="btn btn-primary" href="#courses">Explore Courses</a>
+          <a class="btn btn-ghost" href="#about">How it works</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b id="statLessons">24</b><div>Mini lessons</div></div>
+          <div class="stat"><b id="statQuizzes">8</b><div>Quick quizzes</div></div>
+          <div class="stat"><b id="statMinutes">10</b><div>Mins per lesson</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Today’s Tip</h3>
+        <p class="note" id="dailyTip">Practice for 15 minutes a day. Consistency beats cramming!</p>
+        <div class="note">New to coding? Try <b>Programming Basics</b> — no prior experience needed.</div>
+      </div>
+    </section>
+
+    <section id="courses" aria-labelledby="coursesTitle">
+      <h2 id="coursesTitle">Popular Courses</h2>
+      <div class="grid" id="courseGrid">
+        <!-- Course cards will be enhanced by JS with progress from localStorage -->
+        <article class="card" data-course="math">
+          <div class="chip">Math</div>
+          <h3>Fractions & Percentages</h3>
+          <p class="note">Understand parts of a whole and how to convert between them.</p>
+          <div class="progress" aria-label="Math progress" aria-live="polite"><span style="width:0%"></span></div>
+          <div style="display:flex; gap:.5rem; margin-top:.5rem">
+            <button class="btn btn-primary open-lesson" data-target="lessonDialog" data-lesson="math">Start Lesson</button>
+            <button class="btn btn-ghost mark-complete" data-course="math">Mark complete</button>
+          </div>
+        </article>
+
+        <article class="card" data-course="science">
+          <div class="chip">Science</div>
+          <h3>States of Matter</h3>
+          <p class="note">Solid, liquid, gas — and how particles behave in each state.</p>
+          <div class="progress" aria-label="Science progress"><span style="width:0%"></span></div>
+          <div style="display:flex; gap:.5rem; margin-top:.5rem">
+            <button class="btn btn-primary open-lesson" data-target="lessonDialog" data-lesson="science">Start Lesson</button>
+            <button class="btn btn-ghost mark-complete" data-course="science">Mark complete</button>
+          </div>
+        </article>
+
+        <article class="card" data-course="history">
+          <div class="chip">History</div>
+          <h3>Ancient Civilizations</h3>
+          <p class="note">A quick tour of Mesopotamia, Egypt, Indus Valley, and China.</p>
+          <div class="progress" aria-label="History progress"><span style="width:0%"></span></div>
+          <div style="display:flex; gap:.5rem; margin-top:.5rem">
+            <button class="btn btn-primary open-lesson" data-target="lessonDialog" data-lesson="history">Start Lesson</button>
+            <button class="btn btn-ghost mark-complete" data-course="history">Mark complete</button>
+          </div>
+        </article>
+
+        <article class="card" data-course="programming">
+          <div class="chip">Programming</div>
+          <h3>Programming Basics</h3>
+          <p class="note">What is a variable? What are loops? Learn the core ideas.</p>
+          <div class="progress" aria-label="Programming progress"><span style="width:0%"></span></div>
+          <div style="display:flex; gap:.5rem; margin-top:.5rem">
+            <button class="btn btn-primary open-lesson" data-target="lessonDialog" data-lesson="programming">Start Lesson</button>
+            <button class="btn btn-ghost mark-complete" data-course="programming">Mark complete</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="quiz" aria-labelledby="quizTitle" class="two-col">
+      <div>
+        <h2 id="quizTitle">Quick Quiz</h2>
+        <p class="note">Answer these three questions. Click <em>Check Answers</em> to see your score.</p>
+        <form id="quizForm" class="quiz" aria-describedby="quizHelp">
+          <fieldset class="q">
+            <legend>1) What is 25% as a fraction?</legend>
+            <label><input type="radio" name="q1" value="A"/> 1/5</label>
+            <label><input type="radio" name="q1" value="B"/> 1/4</label>
+            <label><input type="radio" name="q1" value="C"/> 1/3</label>
+          </fieldset>
+          <fieldset class="q">
+            <legend>2) Water boiling is mostly a change of…</legend>
+            <label><input type="radio" name="q2" value="A"/> Chemical state</label>
+            <label><input type="radio" name="q2" value="B"/> Physical state</label>
+            <label><input type="radio" name="q2" value="C"/> Atomic number</label>
+          </fieldset>
+          <fieldset class="q">
+            <legend>3) Which is a loop in programming?</legend>
+            <label><input type="radio" name="q3" value="A"/> if</label>
+            <label><input type="radio" name="q3" value="B"/> while</label>
+            <label><input type="radio" name="q3" value="C"/> return</label>
+          </fieldset>
+          <div id="quizHelp" class="note">Tip: If you're unsure, revisit the lessons above.</div>
+          <div style="display:flex; gap:.5rem">
+            <button type="button" class="btn btn-primary" id="checkQuiz">Check Answers</button>
+            <button type="reset" class="btn btn-ghost">Reset</button>
+          </div>
+          <div class="note">Score: <span class="score" id="score">—</span></div>
+        </form>
+      </div>
+      <aside class="card" aria-label="Study Tips">
+        <h3 style="margin-top:0">Study Tips</h3>
+        <ul class="list">
+          <li>Break topics into tiny chunks.</li>
+          <li>Explain what you learned to a friend.</li>
+          <li>Practice retrieval without looking at notes.</li>
+          <li>Sleep! Memory consolidates overnight.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section id="about" aria-labelledby="aboutTitle">
+      <h2 id="aboutTitle">About EduBasics</h2>
+      <p class="note">EduBasics is a simple, open learning template. Swap the text and questions to make it your own classroom site or personal study hub.</p>
+      <div class="grid">
+        <div class="card">
+          <h3 style="margin-top:0">Clear Lessons</h3>
+          <p>Each lesson uses plain language and concrete examples to make ideas stick.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Interactive</h3>
+          <p>Built‑in quizzes give instant feedback and help you check understanding.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Progress Tracking</h3>
+          <p>Local progress is saved on your device — no sign‑in required.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Accessible</h3>
+          <p>Keyboard‑friendly, high contrast themes, and semantic markup.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contactTitle" class="two-col">
+      <div>
+        <h2 id="contactTitle">Contact</h2>
+        <p class="note">Have feedback or found a typo? Send a quick note.</p>
+        <form id="contactForm" class="form" novalidate>
+          <label>
+            <span>Name</span>
+            <input required name="name" placeholder="Your name" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input required name="email" type="email" placeholder="you@example.com" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea required name="message" rows="4" placeholder="Your message..."></textarea>
+          </label>
+          <div style="display:flex; gap:.5rem">
+            <button class="btn btn-primary" type="submit">Send</button>
+            <button class="btn btn-ghost" type="reset">Clear</button>
+          </div>
+          <div id="contactStatus" class="note" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Why a Single File?</h3>
+        <p>This template is easy to host anywhere — open the file directly, or drop it into any static hosting service. No build tools needed.</p>
+        <ul class="list">
+          <li>💡 Edit text to customize lessons.</li>
+          <li>🧪 Update quiz answers in the script.</li>
+          <li>🎨 Tweak colors in <code>:root</code> variables.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <div>© <span id="year"></span> EduBasics</div>
+      <div>Made with ❤️ — This is a single‑file HTML/CSS/JS template.</div>
+    </div>
+  </footer>
+
+  <!-- Reusable lesson modal -->
+  <dialog id="lessonDialog" aria-labelledby="lessonTitle">
+    <div class="modal-head">
+      <h3 id="lessonTitle" style="margin:0">Lesson</h3>
+      <button class="btn btn-ghost" onclick="document.getElementById('lessonDialog').close()">Close</button>
+    </div>
+    <div class="modal-body" id="lessonContent"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="document.getElementById('lessonDialog').close()">Close</button>
+      <button class="btn btn-primary" id="markCompleteFromModal">Mark complete</button>
+    </div>
+  </dialog>
+
+  <script>
+    // --- Theme toggle (saves preference) ---
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('themeBtn');
+    const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    setTheme(savedTheme);
+
+    function setTheme(mode){
+      root.setAttribute('data-theme', mode);
+      themeBtn.setAttribute('aria-pressed', mode === 'dark' ? 'false' : 'true');
+      localStorage.setItem('theme', mode);
+    }
+    themeBtn.addEventListener('click',()=>{
+      setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    // --- Simple daily tip rotation ---
+    const tips = [
+      'Practice for 15 minutes a day. Consistency beats cramming!',
+      'Teach someone else to learn twice.',
+      'Test yourself without notes — retrieval builds memory.',
+      'Take short breaks. Focus comes back sharper.',
+      'Sleep well. Your brain files knowledge overnight.'
+    ];
+    const tipIdx = new Date().getDate() % tips.length;
+    document.getElementById('dailyTip').textContent = tips[tipIdx];
+
+    // --- Progress tracking with localStorage ---
+    const progressKey = 'edubasics-progress';
+    const progress = JSON.parse(localStorage.getItem(progressKey) || '{}');
+    function updateProgressUI(){
+      document.querySelectorAll('[data-course]').forEach(card=>{
+        const id = card.getAttribute('data-course');
+        const val = progress[id] ? 100 : 0;
+        card.querySelector('.progress span').style.width = val + '%';
+      });
+    }
+    updateProgressUI();
+
+    document.querySelectorAll('.mark-complete').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const id = btn.getAttribute('data-course');
+        progress[id] = true;
+        localStorage.setItem(progressKey, JSON.stringify(progress));
+        updateProgressUI();
+      });
+    });
+
+    // --- Lesson modal content ---
+    const lessons = {
+      math: {
+        title: 'Fractions & Percentages',
+        html: `
+          <p><b>Fraction</b> shows part of a whole, like <code>1/4</code> (one out of four equal parts).</p>
+          <p><b>Percentage</b> means “per 100”. To turn a fraction into a percent, make the denominator 100. Example: <code>1/4 = 25%</code>.</p>
+          <ul>
+            <li>To get a percent: multiply the fraction by 100 and add <code>%</code>.</li>
+            <li>To get a fraction: divide the percent by 100 and simplify.</li>
+          </ul>
+          <p><i>Try:</i> 50% = 1/2, 20% = 1/5, 12.5% = 1/8.</p>
+        `
+      },
+      science: {
+        title: 'States of Matter',
+        html: `
+          <p>Matter is anything that has mass and takes up space. It commonly exists as <b>solid</b>, <b>liquid</b>, or <b>gas</b>.</p>
+          <ul>
+            <li><b>Solid:</b> fixed shape & volume, tightly packed particles.</li>
+            <li><b>Liquid:</b> fixed volume, shape of the container.</li>
+            <li><b>Gas:</b> no fixed shape or volume, particles far apart.</li>
+          </ul>
+          <p>Heating adds energy and can change state: solid → liquid (melting) → gas (boiling).</p>
+        `
+      },
+      history: {
+        title: 'Ancient Civilizations',
+        html: `
+          <p>Early complex societies grew near rivers that supported farming and trade.</p>
+          <ul>
+            <li><b>Mesopotamia</b> — Tigris & Euphrates; cuneiform writing.</li>
+            <li><b>Egypt</b> — Nile; pyramids; hieroglyphs.</li>
+            <li><b>Indus Valley</b> — urban planning; grid cities like Mohenjo‑Daro.</li>
+            <li><b>China</b> — Yellow River; bronze work and early dynasties.</li>
+          </ul>
+        `
+      },
+      programming: {
+        title: 'Programming Basics',
+        html: `
+          <p>Programs are sets of instructions for a computer.</p>
+          <ul>
+            <li><b>Variable</b> stores a value, e.g., <code>x = 5</code>.</li>
+            <li><b>Condition</b> runs code only if true, e.g., <code>if (x > 3)</code>.</li>
+            <li><b>Loop</b> repeats, e.g., <code>while</code> or <code>for</code>.</li>
+            <li><b>Function</b> groups steps to reuse.</li>
+          </ul>
+        `
+      }
+    };
+
+    const lessonDialog = document.getElementById('lessonDialog');
+    const lessonTitle = document.getElementById('lessonTitle');
+    const lessonContent = document.getElementById('lessonContent');
+    let currentLesson = null;
+
+    document.querySelectorAll('.open-lesson').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.getAttribute('data-lesson');
+        currentLesson = key;
+        const data = lessons[key];
+        lessonTitle.textContent = data.title;
+        lessonContent.innerHTML = data.html;
+        lessonDialog.showModal();
+      });
+    });
+
+    document.getElementById('markCompleteFromModal').addEventListener('click', ()=>{
+      if (!currentLesson) return;
+      progress[currentLesson] = true;
+      localStorage.setItem(progressKey, JSON.stringify(progress));
+      updateProgressUI();
+      lessonDialog.close();
+    });
+
+    // --- Quiz logic ---
+    const answers = { q1:'B', q2:'B', q3:'B' };
+    document.getElementById('checkQuiz').addEventListener('click',()=>{
+      const form = new FormData(document.getElementById('quizForm'));
+      let score = 0, total = Object.keys(answers).length;
+      for(const [k,v] of Object.entries(answers)) if(form.get(k) === v) score++;
+      document.getElementById('score').textContent = `${score}/${total}`;
+    });
+
+    // --- Contact form (demo only) ---
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const f = new FormData(e.currentTarget);
+      const name = f.get('name')?.toString().trim();
+      const email = f.get('email')?.toString().trim();
+      const msg = f.get('message')?.toString().trim();
+      const status = document.getElementById('contactStatus');
+      if(!name || !email || !msg){
+        status.textContent = 'Please fill out all fields.';
+        status.style.color = 'var(--danger)';
+        return;
+      }
+      status.textContent = 'Thanks! Your message was “sent” (demo).';
+      status.style.color = 'var(--accent)';
+      e.currentTarget.reset();
+    });
+
+    // --- Footer year ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
